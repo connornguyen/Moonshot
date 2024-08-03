@@ -20,11 +20,59 @@ struct Address: Codable {
 
 struct ContentView: View {
     
+    //Get data from JSON using decoder
     let astronaut: [String: Astronaut] = Bundle.main.decode("astronauts.json")
     let mission: [Mission] = Bundle.main.decode("missions.json")
     
+    //Set up Grid
+    let columns = [
+        GridItem(.adaptive(minimum: 150))
+    ]
+    
     var body: some View {
-        Text(String(astronaut.count))
+        NavigationStack{
+            ScrollView{
+                LazyVGrid(columns: columns){
+                    ForEach(mission) { mission in
+                        NavigationLink {
+                            Text("Detail View")
+                        } label: {
+                            VStack {
+                                Image(mission.image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100, height: 100)
+                                    .padding()
+                                
+                                VStack{
+                                    Text(mission.disPlayedName)
+                                        .font(.title3)
+                                        .foregroundStyle(.white)
+                                    
+                                    
+                                    Text(mission.formattedLaunchDate)
+                                        .font(.caption)
+                                        .foregroundStyle(.gray)
+                                }
+                                .padding(.vertical)
+                                .frame(maxWidth: .infinity)
+                                .background(.lightBackGround)
+                            }
+                            .clipShape(.rect(cornerRadius: 30))
+                            .overlay(
+                            RoundedRectangle(cornerRadius: 30)
+                                .stroke(.lightBackGround)
+                            )
+                            
+                        }
+                    }
+                }
+                .padding([.vertical, .horizontal])
+            }
+            .navigationTitle("Moonshot")
+            .background(.darkBackGround)
+            .preferredColorScheme(.dark)
+        }
     }
 }
 
