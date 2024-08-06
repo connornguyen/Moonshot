@@ -8,7 +8,24 @@
 import SwiftUI
 
 struct MissionView: View {
+    struct CrewMember {
+        let role: String
+        let astronaut: Astronaut
+    }
+    
+    init(mission: Mission, astronauts: [String: Astronaut]) {
+        self.mission = mission
+        self.crew = mission.crew.map { member in
+            if let astronaut = astronauts[member.name] {
+                return CrewMember(role: member.role, astronaut: astronaut)
+            } else {
+                fatalError("Missing \(member.name).")
+            }
+        }
+    }
+    
     let mission: Mission
+    let crew: [CrewMember]
     
     var body: some View {
         ScrollView{
@@ -23,7 +40,6 @@ struct MissionView: View {
                     Text("Mission Highlights")
                         .font(.title.bold())
                         
-                    
                     Text(mission.description)
                         .font(.caption.bold())
                 }
@@ -31,6 +47,37 @@ struct MissionView: View {
                 .padding(.vertical)
             }
             .padding(.all)
+            
+            ScrollView(.horizontal, showsIndicators: false){
+                HStack{
+                    ForEach(crew, id: \.role) { crewMember in
+                        NavigationLink {
+                            Text("Astronaut Detail")
+                        } label: {
+                            HStack{
+                                Image(crewMember.astronaut.id)
+                                    .resizable()
+                                    .frame(width: 104, height: 72)
+                                    .clipShape(.capsule)
+                                    .overlay(
+                                        Capsule()
+                                            .strokeBorder(.white, lineWidth: 1)
+                                    )
+                            }
+                            VStack {
+                                Text(crewMember.astronaut.name)
+                                    .font(.subheadline.bold())
+                                    .foregroundColor(.white)
+                
+                                Text(crewMember.role)
+                                    .foregroundColor(.white.opacity(0.5))
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                }
+                .padding(.horizontal)
+            }
         }
         .navigationTitle(mission.disPlayedName)
         .navigationBarTitleDisplayMode(.inline)
@@ -40,6 +87,8 @@ struct MissionView: View {
 
 #Preview {
     let missions: [Mission] = Bundle.main.decode("missions.json")
+    let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json")
     
-    return MissionView(mission: missions[0])
+    return MissionView(mission: missions[0], astronauts: astronauts)
+        .preferredColorScheme(.dark)
 }
