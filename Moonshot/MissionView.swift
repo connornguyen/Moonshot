@@ -37,22 +37,39 @@ struct MissionView: View {
                     }
                     .padding(.top)
                 VStack(alignment: .leading)  {
+                    
+                    //Seperate layout
+                    Rectangle()
+                        .frame(height: 2)
+                        .foregroundStyle(.lightBackGround)
+                        .padding(.vertical)
+                    
                     Text("Mission Highlights")
                         .font(.title.bold())
                         
                     Text(mission.description)
                         .font(.caption.bold())
+                    
+                    //This seperate layout
+                    Rectangle()
+                        .frame(height: 2)
+                        .foregroundStyle(.lightBackGround)
+                        .padding(.vertical)
                 }
                 .padding(.horizontal)
-                .padding(.vertical)
             }
-            .padding(.all)
+            .padding(.horizontal)
             
+            Text("Crew")
+                .font(.title.bold())
+                .padding(.bottom, 5)
+                
             ScrollView(.horizontal, showsIndicators: false){
                 HStack{
                     ForEach(crew, id: \.role) { crewMember in
                         NavigationLink {
-                            Text("Astronaut Detail")
+                            //Call AstronautView
+                            AstronautView(astronaut: crewMember.astronaut)
                         } label: {
                             HStack{
                                 Image(crewMember.astronaut.id)
