@@ -23,7 +23,7 @@ extension Bundle {
         formatter.dateFormat = "y-MM-dd"
         decoder.dateDecodingStrategy = .formatted(formatter)
     
-        
+        //Try to find error and return error value
         do {
             return try decoder.decode(T.self, from: data)
         } catch DecodingError.keyNotFound(let key, let context){
