@@ -49,7 +49,6 @@ struct ContentView: View {
                                         .font(.title3)
                                         .foregroundStyle(.white)
                                     
-                                    
                                     Text(mission.formattedLaunchDate)
                                         .font(.caption)
                                         .foregroundStyle(.gray)
@@ -63,8 +62,11 @@ struct ContentView: View {
                             RoundedRectangle(cornerRadius: 30)
                                 .stroke(.lightBackGround)
                             )
-                            
                         }
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 30)
+                                .stroke(.white, lineWidth: 0.2)
+                            )
                     }
                 }
                 .padding([.vertical, .horizontal])
